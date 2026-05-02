@@ -5,96 +5,96 @@
             h5 {
                 font-family:times;
             }
-            .white-bishop{
+            .white-bishop,.black-pawn,.white-pawn,.black-rook,.white-rook,.black-knight,.white-knight,.black-bishop,.black-queen,.white-queen,.black-king,.white-king{
                 width:clamp(6px, 25vw, 36px);
                 height:clamp(6px, 25vw, 36px);
                 background-size:cover;
+            }
+            .green,.tan{
+                width:clamp(6px,25vw,36px);
+                height:clamp(6px,25vh,36px);
+            }
+            .white-bishop{
                 background-image:url(https://codehs.com/uploads/a34f441bc3d9511cdb4004027cb715b8);
             }
             .green{
-                width:clamp(6px,25vw,36px);
-                height:clamp(6px,25vh,36px);
                 background-color:DarkSeaGreen;
             }
             .tan {
-                width:clamp(6px,25vw,36px);
-                height:clamp(6px,25vh,36px);
                 background-color:Bisque;
             }
             .black-pawn {
-                width:clamp(6px,25vw,36px);
-                height:clamp(6px,25vh,36px);
-                background-size:cover;
                 background-image:url(https://codehs.com/uploads/7c022d8a4bf60cf00554b59da049fbf1);
             }
             .white-pawn {
-                width:clamp(6px,25vw,36px);
-                height:clamp(6px,25vh,36px);
-                background-size:cover;
                 background-image:url(https://codehs.com/uploads/26b3dee050ea3656958406421923d4a6);
             }
             .black-rook {
-                width:clamp(6px,25vw,36px);
-                height:clamp(6px,25vh,36px);
-                background-size:cover;
                 background-image:url("https://codehs.com/uploads/5b9c98a0592ed583c6dedf8415ca4722");
             }
             .white-rook {
-                width:clamp(6px,25vw,36px);
-                height:clamp(6px,25vh,36px);
-                background-size:cover;
                 background-image:url(https://codehs.com/uploads/788cc38c7e1102999f966dd5d2f07df9);
             }
             .black-knight {
-                width:clamp(6px,25vw,36px);
-                height:clamp(6px,25vh,36px);
-                background-size:cover;
                 background-image:url("https://codehs.com/uploads/dd3a00c5732c8461430f97db563a5804");
             }
             .white-knight {
-                width:clamp(6px,25vw,36px);
-                height:clamp(6px,25vh,36px);
-                background-size:cover;
                 background-image:url(https://codehs.com/uploads/d7900db06449dbd384c715f36353dc3d);
             }
             .black-bishop {
-                width:clamp(6px,25vw,36px);
-                height:clamp(6px,25vh,36px);
-                background-size:cover;
                 background-image:url("https://codehs.com/uploads/66ae90f89c8cb0818c509869942359c0");
             }
             .black-queen {
-                width:clamp(6px,25vw,36px);
-                height:clamp(6px,25vh,36px);
-                background-size:cover;
                 background-image:url("https://codehs.com/uploads/2f8b15062e1921144223373aadcfc156");
             }
             .white-queen {
-                width:clamp(6px,25vw,36px);
-                height:clamp(6px,25vh,36px);
-                background-size:cover;
                 background-image:url(https://codehs.com/uploads/d5b35e70c1d9ac89aac4c7b0e46d78ba);
             }
             .black-king {
-                width:clamp(6px,25vw,36px);
-                height:clamp(6px,25vh,36px);
-                background-size:cover;
                 background-image:url("https://codehs.com/uploads/91662eebfb11a96930ea24478037da6d");
             }
             .white-king {
-                width:clamp(6px,25vw,36px);
-                height:clamp(6px,25vh,36px);
-                background-size:cover;
                 background-image:url(https://codehs.com/uploads/e67fdc1bea7a0137152f27a8acb37572);
+            }
+            table, th, td, tr{
+                border: 1px solid black;
+                border-collapse:collapse;
             }
         </style>
         <script>
-            var pastTeamColor = null
-            var last_clicked_peice = []
-            var last_click_square = null
-            var last_click_id = null
-            var turn='white';
-            var past_color = null
+        /*
+        class Team {
+            constructor(color,killed_pieces){
+                this.color = c;
+                this.killed_pieces = {
+                    "king":0,
+                    "knight":0,
+                    "queen":0,
+                    "bishop":0,
+                    "rook":0,
+                    "pawn":0
+                }
+            }
+            function change_kill_count(piece){
+                let piece_type = piece.split('-');
+                piece_type = piece_type[1];
+                switch (piece_type){
+                    case "king":
+                        console.log('ddddddddd')
+                }
+            }
+        }
+        */
+            function canDivide(num,fac){
+                return num%fac == 0
+            }
+            let pawn_move_range = -8
+            let pastTeamColor = null
+            let last_clicked_peice = []
+            let last_click_square = null
+            let last_click_id = null
+            let turn='white';
+            let past_color = null
             let cord_translations = {
                 '1':'1,8',
                 '2':'2,8',
@@ -165,9 +165,11 @@
             function toggle(){
                 if (turn == 'white'){
                     turn = 'black'
-                    
+                    pawn_move_range = 8
+                    console.log(pawn_move_range)
                 }else{
                     turn = 'white'
+                    pawn_move_range = -8
                 }
                 document.getElementById('turnLabel').textContent=turn;
             }
@@ -185,7 +187,7 @@
                     if(rule(last_click_square,detail))
                     {
                         console.log('move');
-                    movePiece(last_click_square,detail);
+                        movePiece(last_click_square,detail);
                     }
                 }
                 
@@ -194,117 +196,124 @@
                     detail.style.backgroundColor = "yellow";
                 }
             }
-            function rule (lastClickedPiece, currentPiece)
-            {
-                var id=parseInt(lastClickedPiece.id);
-                var currentId=parseInt(currentPiece.id);
-                var idDiff=currentId-id;
-                var absolute_idDiff = Math.abs(idDiff)
-                var current_space_color = currentPiece.style.backgroundColor;
-                var past_space_color = lastClickedPiece.style.backgroundColor;
-               if(lastClickedPiece.classList[1]==currentPiece.classList[1])
-               {
-                   return;
+            function rule (lastClickedPiece, currentPiece){
+                /*
+                Note: The current_id and id varibles are only numbers, so use 
+                the document selector to use collision detection.
+                */
+                //this is for the id and their values
+                let teamColor = getColor(lastClickedPiece)
+                let id=parseInt(lastClickedPiece.id);
+                let currentId=parseInt(currentPiece.id);
+                let idDiff=currentId-id;
+                let absolute_idDiff = Math.abs(idDiff)
+                let current_space_color = currentPiece.classList[0];
+                let past_space_color = lastClickedPiece.classList[0];
+                
+                //these are for horozontal collision
+                
+                let pastY = cord_translations[id]
+                let currentY = cord_translations[currentId]
+                currentY = decode(currentY)
+                pastY = decode(pastY)
+                let is_on_same_rank = currentY == pastY
+                let b = id;
+                let amount_of_classes = document.getElementById(b).classList.length
+                // this is for diagonal logic
+                let canMove = canDivide(absolute_idDiff,9)|| canDivide(absolute_idDiff,7);
+                let is_SameColor = current_space_color == past_space_color
+                //End of varible assignments
+                
+               if(lastClickedPiece.classList[1]==currentPiece.classList[1]){
+                   return false;
                }
-               
-                switch(lastClickedPiece.classList[1])
-                 {
+                switch(lastClickedPiece.classList[1]){
+                    /*
+                    Note: The pawn was the first piece remake where readability
+                    was a priority.
+                    */
                     case "black-pawn":
-                        var singleMove = parseInt(id)+8
+                    case "white-pawn":
+                        let selected_element = id+pawn_move_range;
+                        let square_infront_classNum = document.getElementById(selected_element).classList.length
+                        let inverted_idDiff = idDiff *(-1)
                         if (currentPiece.classList.length > 1){
-                            if (idDiff == 9 || idDiff == 7){
-                                if (turn== 'black'){
-                                    return true; 
-                                }
+                            if (inverted_idDiff == 9 || inverted_idDiff == 7){
+                                return true;
                             }else{
                                 return false;
                             }
                         }else{
-                            if(singleMove!=parseInt(currentId)){
-                                 return false;
-                            }else{
-                                if (turn = 'black'){
-                                    return true;
-                                }
+                            let black_second_row = id >= 9 && 16 >= id;
+                            let white_second_row = id >= 49 && 56 >= id;
+                            let in_range = (black_second_row||white_second_row)
+                            if (idDiff > 16){
+                                console.log('afaf')
+                                return false
                             }
-                        }
-                        break;
-                    case "white-pawn":
-                        var singleMove = parseInt(id)-8
-                        var inverted_idDiff = idDiff *(-1)
-                        if (turn == 'white'){
-                            if (currentPiece.classList.length > 1){
-                                if (inverted_idDiff == 9 || inverted_idDiff == 7){
-                                    return true;
-                                }else{
+                            console.log('afafaf')
+                            if (idDiff == pawn_move_range){
+                                return true;
+                            }else{
+                                if (idDiff != pawn_move_range*2 ||!in_range|| currentPiece.classList.length > 1 || square_infront_classNum > 1){
+                                    console.log('my eyes decive')
                                     return false;
                                 }
-                            }else{
-                                if(singleMove!=parseInt(currentId)){
-                                     return false;
-                                }else{
-                                    return true;
-                                }
+                
                             }
+                            console.log('aa');
+                            return true;
                         }
                         break;
                     case "black-rook":
-                    case "white-rook":    
-                        if (idDiff%8 == 0){
+                    case "white-rook":
+                        if (!canDivide(idDiff,8) && is_on_same_rank){
+                            return false;
+                        }
+                        if (canDivide(idDiff,8)){
                             /*
-                            Note: This is the first chess piece with implemented collison
-                            The rook checks if it can move by lopping between the
-                            spaces with between the rook and destination. There 
-                            are 2 variations which will be trigered depending on
-                            if the rook is going up or down.
+                            Note: This is the first chess piece with implemented
+                            collsion detection
                             */
-                            if (idDiff < 0){
-                                //Travling up
-                                var b = id;
-                                b -= 8
-                                while(b>currentId){
-                                    var amount_of_classes = document.getElementById(b).classList.length
-                                    
-                                    if (amount_of_classes > 1 && b>currentId){
-                                        console.log(b+" class num"+document.getElementById(b).classList.length);
-                                        return false;
-                                    }else{
-                                        console.log(b);
-                                        b = b-8;
-                                    }
-                                }
-                                return true;
-                            }else{
-                                //travling down
-                                var d = id;
-                                d += 8
-                                while(d<currentId){
-                                    var amount_of_classes = document.getElementById(d).classList.length
-                                    
-                                    if (amount_of_classes > 1 && d<currentId){
-                                        return false;
-                                    }else{
-                                        console.log(d);
-                                        d = d+8;
-                                    }
-                                }
-                                return true;
-                            }
-                        }else{
-                                var pastY = cord_translations[id]
-                                var currentY = cord_translations[currentId]
-                                currentY = decode(currentY)
-                                pastY = decode(pastY)
-                                if(pastY.ly == currentY.ly){
-                                    return true;
-                                }else{
+                            while(b!=currentId){
+                                
+                                if (amount_of_classes > 1 && b!=currentId && b != id){
+                                    console.log(b+" class num"+document.getElementById(b).classList.length);
                                     return false;
                                 }
+                                if (b == currentId){
+                                    break;
+                                }
+                                if (b > currentId){
+                                    b -= 8
+                                }else{
+                                    b += 8
+                                }
+                            }
+                            return true;
+                        }else{
+                            //horozontal movement
+                            while(b!=currentId){
+                                
+                                if (amount_of_classes > 1 && b!=currentId && b != id){
+                                    console.log(b+" class num "+document.getElementById(b).classList.length);
+                                    return false;
+                                }
+                                if (b == currentId){
+                                    break;
+                                }
+                                if (b > currentId){
+                                    b -= 1
+                                }else{
+                                    b += 1
+                                }
+                            }
+                            return true;
                         }
                         break;
                     case "black-bishop":
                     case "white-bishop":    
-                        if (absolute_idDiff%9 == 0|| absolute_idDiff%7 == 0){
+                        if (canDivide(absolute_idDiff,9)|| absolute_idDiff%7 == 0){
                             if (current_space_color == past_space_color){
                                 return true;
                             }
@@ -328,38 +337,83 @@
                         break;
                     case "black-queen":
                     case "white-queen":
-                        if (idDiff%8 == 0){
-                            return true;
-                        }else if (absolute_idDiff%9 == 0|| absolute_idDiff%7 == 0 && current_space_color == past_space_color){
-                            return true;
-                        }else{
-                                var lastIdPast = parseInt(id/8);
-                                 
-                                var lowerBoundry = (lastIdPast * 8) + 1;
-                                 
-                                var upperBoundry = lowerBoundry+8;
-                                 
-                                if(upperBoundry >= currentId && currentId >=lowerBoundry ){
-                                    return true;
-                                }else{
+                        let form = 1;
+                        let direction = null;
+                        //m
+                         if (!canDivide(idDiff,8) && !is_on_same_rank && !canMove){
+                            return false;
+                        }
+                        if (canDivide(idDiff,8)){
+                            while(b!=currentId){
+                                console.log(idDiff);
+                                
+                                if (amount_of_classes > 1 && b!=currentId && b != id){
+                                    console.log(b+" class num"+document.getElementById(b).classList.length);
                                     return false;
                                 }
+                                if (b == currentId){
+                                    break;
+                                }
+                                if (b > currentId){
+                                    b -= 8;
+                                }else{
+                                    b += 8;
+                                }
+                            }
+                            return true;
+                        }else if (is_SameColor && canMove){
+                            let change = 0;
+                            if (idDiff < 0){
+                                form = -1;
+                            }
+                            if (canDivide(idDiff,7)){
+                                change = 7*form
+                            }else{
+                                change = 9*form
+                            }
+                            while(b!= currentId){
+                                if (amount_of_classes > 1 && b!=currentId && b != id){
+                                    console.log(b+" r "+document.getElementById(b).classList.length);
+                                    return false;
+                                }
+                                if (b == currentId){
+                                    break;
+                                }
+                                b += form;
+                            }
+                        }else{
+                            //horozontal movement
+                            while(b!=currentId){
+                                
+                                if (amount_of_classes > 1 && b!=currentId && b != id){
+                                    console.log(b+" class num "+document.getElementById(b).classList.length);
+                                    return false;
+                                }
+                                if (b == currentId){
+                                    break;
+                                }
+                                if (b > currentId){
+                                    b -= 1;
+                                }else{
+                                    b += 1;
+                                }
+                            }
+                            return true;
                         }
+                        break;
+                    }
                     return false;
+                    current_space_color = currentPiece.classList[0];
+                    past_space_color = lastClickedPiece.classList[0];
                 }
-            }
+            
             function getColor(selector){
-                var id = document.getElementById(selector)
-                var teamColorUnprocessed = id.className.split('-')[0];
-                var teamColor = teamColorUnprocessed.split(' ');
-                teamColor = teamColor[1];
+                let teamColorUnprocessed = selector.className.split('-')[0];
+                let teamColor = teamColorUnprocessed.split(' ');
+                return teamColor[1];
             }
             function movePiece(lastClickedPiece, currentPiece) {
-                var lastID = lastClickedPiece.id;
-                var classList = lastClickedPiece.className.split('');
-                var teamColorUnprocessed = lastClickedPiece.className.split('-')[0];
-                var teamColor = teamColorUnprocessed.split(' ');
-                teamColor = teamColor[1];
+                teamColor = getColor(lastClickedPiece)
                 if(teamColor != pastTeamColor){
                     if (lastClickedPiece.classList.length > 1 && currentPiece.classList.length == 1) {
                         
@@ -416,8 +470,8 @@
                 <td onClick = "logClick(this)" id = "1" class = "green black-rook"></td>
                 <td onClick = "logClick(this)" id = "2" class = "tan black-knight"></td>
                <td onClick = "logClick(this)" id = "3" class = "green black-bishop"></td>
-                <td onClick = "logClick(this)" id = "4" class = "tan black-king"></td>
-               <td onClick = "logClick(this)" id = "5" class = "green black-queen"></td>
+                <td onClick = "logClick(this)" id = "4" class = "tan black-queen"></td>
+               <td onClick = "logClick(this)" id = "5" class = "green black-king"></td>
                 <td onClick = "logClick(this)" id = "6" class = "tan black-bishop"></td>
                <td onClick = "logClick(this)" id = "7" class = "green black-knight"></td>
                 <td onClick = "logClick(this)" id = "8" class = "tan black-rook"></td>
@@ -483,15 +537,15 @@
                <td onClick = "logClick(this)" id = "53" class = "green white-pawn "></td>
                 <td onClick = "logClick(this)" id = "54" class = "tan white-pawn "></td>
                <td onClick = "logClick(this)" id = "55" class = "green white-pawn "></td>
-                <td onClick = "logClick(this)" id = "56" class = "tan white-pawn "></td>
+                <td onClick = "logClick(this)" id = "56" class = "tan "></td>
             </tr>
             <!--Row 1-->
             <tr>
                 <td onClick = "logClick(this)" id = "57" class = "tan white-rook"></td>
                <td onClick = "logClick(this)" id = "58" class = "green white-knight"></td>
                 <td onClick = "logClick(this)" id = "59" class = "tan white-bishop"></td>
-               <td onClick = "logClick(this)" id = "60" class = "green white-king"></td>
-                <td onClick = "logClick(this)" id = "61" class = "tan white-queen"></td>
+               <td onClick = "logClick(this)" id = "60" class = "green white-queen"></td>
+                <td onClick = "logClick(this)" id = "61" class = "tan white-king"></td>
                <td onClick = "logClick(this)" id = "62" class = "green white-bishop"></td>
                 <td onClick = "logClick(this)" id = "63" class = "tan white-knight"></td>
                <td onClick = "logClick(this)" id = "64" class = "green white-rook"></td>
