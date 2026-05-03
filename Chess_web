@@ -267,6 +267,11 @@
                         case 61:
                             replace(element,'white-king');
                             break;
+                        default:
+                            if (element.classList.length > 1){
+                                piece = element.classList[1];
+                                element.classList.remove(piece);
+                            }
                     }   
                 }
             }
