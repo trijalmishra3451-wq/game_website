@@ -207,72 +207,74 @@
                 }
             }
             function reset(){
-                for(let i=0;i<64;i++){
-                    j = i + 1;
-                    element = document.getElementById(j);
-                    switch(j){
-                        case 1:
-                        case 8:
-                            replace(element,'black-rook');
-                            break;
-                        case 2:
-                        case 7:
-                            replace(element,'black-knight');
-                            break;
-                        case 3:
-                        case 6:
-                            replace(element,'black-bishop');
-                            break;
-                        case 4:
-                            replace(element,'black-queen');
-                            break;
-                        case 5:
-                            replace(element,'black-king');
-                            break;
-                        case 9:
-                        case 10:
-                        case 11:
-                        case 12:
-                        case 13:
-                        case 14:
-                        case 15:
-                        case 16:
-                            replace(element,'black-pawn');
-                            break;
-                        case 49:
-                        case 50:
-                        case 51:
-                        case 52:
-                        case 53:
-                        case 54:
-                        case 55:
-                        case 56:
-                            replace(element,'white-pawn');
-                            break;
-                        case 57:
-                        case 64:
-                            replace(element,'white-rook');
-                            break;
-                        case 58:
-                        case 63:
-                            replace(element,'white-knight');
-                            break;
-                        case 59:
-                        case 62:
-                            replace(element,'white-bishop');
-                            break;
-                        case 60:
-                            replace(element,'white-queen');
-                            break;
-                        case 61:
-                            replace(element,'white-king');
-                            break;
-                        default:
-                            if (element.classList.length > 1){
-                                piece = element.classList[1];
-                                element.classList.remove(piece);
-                            }
-                    }   
+                if(confirm('Are you sure you want to reset the round?')){
+                    for(let i=0;i<64;i++){
+                        j = i + 1;
+                        element = document.getElementById(j);
+                        switch(j){
+                            case 1:
+                            case 8:
+                                replace(element,'black-rook');
+                                break;
+                            case 2:
+                            case 7:
+                                replace(element,'black-knight');
+                                break;
+                            case 3:
+                            case 6:
+                                replace(element,'black-bishop');
+                                break;
+                            case 4:
+                                replace(element,'black-queen');
+                                break;
+                            case 5:
+                                replace(element,'black-king');
+                                break;
+                            case 9:
+                            case 10:
+                            case 11:
+                            case 12:
+                            case 13:
+                            case 14:
+                            case 15:
+                            case 16:
+                                replace(element,'black-pawn');
+                                break;
+                            case 49:
+                            case 50:
+                            case 51:
+                            case 52:
+                            case 53:
+                            case 54:
+                            case 55:
+                            case 56:
+                                replace(element,'white-pawn');
+                                break;
+                            case 57:
+                            case 64:
+                                replace(element,'white-rook');
+                                break;
+                            case 58:
+                            case 63:
+                                replace(element,'white-knight');
+                                break;
+                            case 59:
+                            case 62:
+                                replace(element,'white-bishop');
+                                break;
+                            case 60:
+                                replace(element,'white-queen');
+                                break;
+                            case 61:
+                                replace(element,'white-king');
+                                break;
+                            default:
+                                if (element.classList.length > 1){
+                                    piece = element.classList[1];
+                                    element.classList.remove(piece);
+                                }
+                        }   
+                    }
                 }
             }
             function toggle(){
