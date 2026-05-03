@@ -94,6 +94,14 @@
                 }
             }
             */
+            function reset_confirm(confirmation_request){
+                if(!confirmation_request){
+                    return true;
+                }
+                if(confirm("Are you sure you want to reset the round")){
+                    return true;
+                }
+            }
             function canDivide(num,fac){
                 return num%fac == 0
             }
@@ -206,8 +214,8 @@
                     element.classList.add(replace_piece);
                 }
             }
-            function reset(){
-                if(confirm('Are you sure you want to reset the round?')){
+            function reset(reset_confirm_prompt){
+                if(reset_confirm(reset_confirm_prompt)){
                     for(let i=0;i<64;i++){
                         j = i + 1;
                         element = document.getElementById(j);
@@ -592,19 +600,21 @@
                            tagspast = tagsPast.split('-');
                            
                            if(tagscurrent[0]!=tagspast[0]){
-                               
-                               const pastpieceClassName = lastClickedPiece.classList[1];
+                                const pastpieceClassName = lastClickedPiece.classList[1];
                                 const currentpieceName = currentPiece.classList[1];
                                
                                 // 2. Add that class to the new square
                                 currentPiece.classList.remove(currentpieceName);
-                                
+                                if (currentpieceName == 'white-king' || currentpieceName == 'black-king'){
+                                    alert("The king has died, the round will now reset");
+                                    reset(false);
+                                }
                                 lastClickedPiece.classList.remove(pastpieceClassName);
                                 currentPiece.classList.add(pastpieceClassName);
                                 // 3. Remove that class from the old square
-                                toggle()
-                                pastTeamColor = teamColor
-                                teamColor = null
+                                toggle();
+                                pastTeamColor = teamColor;
+                                teamColor = null;
                             }
                                     
                        }
