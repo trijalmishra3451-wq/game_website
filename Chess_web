@@ -333,7 +333,6 @@
                 let absolute_idDiff = Math.abs(idDiff)
                 let current_space_color = currentPiece.classList[0];
                 let past_space_color = lastClickedPiece.classList[0];
-                
                 //these are for horozontal collision
                 
                 let pastY = cord_translations[id];
@@ -345,9 +344,10 @@
                 let amount_of_classes = document.getElementById(b).classList.length;
                 let alone = amount_of_classes == 1;
                 // this is for diagonal logic
-                
+                let form = -1;
+                let change = change = 1*form;
                 let canMove = canDivide(idDiff,9)|| canDivide(idDiff,7);
-                let is_SameColor = current_space_color == past_space_color
+                let is_SameColor = current_space_color == past_space_color;
                 
                 //This first if statement is to prevent suicide by the way
                 if(lastClickedPiece.classList[1]==currentPiece.classList[1]){
@@ -359,7 +359,6 @@
                     was a priority.
                     */
                     case "black-pawn":
-                    case "white-pawn":
                         /*move range is used as an adaptive value which can work
                         for both pawn versions. In earlier versions, I had to put
                         the indivisual values for the move ranges. But now, I
@@ -398,59 +397,37 @@
                         break;
                     case "black-rook":
                     case "white-rook":
+                        /*this first block of logic is to catch outliers before
+                        spending times in the loops.
+                        */
                         if (!canDivide(idDiff,8) && !is_on_same_rank){
                             return false;
                         }
-                        if (canDivide(idDiff,8)){
-                            /*
-                            Note: This is the first chess piece with implemented
-                            collsion detection
-                            */
-                            while(b!=currentId){
-                                
-                                if (!alone && b!=currentId && b != id){
-                                    console.log(b+" class num"+document.getElementById(b).classList.length);
-                                    return false;
-                                }
-                                if (b == currentId){
-                                    break;
-                                }
-                                if (b > currentId){
-                                    b -= 8
-                                }else{
-                                    b += 8
-                                }
-                                amount_of_classes = document.getElementById(b).classList.length;
-                                alone = amount_of_classes == 1;
-                            }
-                            return true;
-                        }else{
-                            //horozontal movement
-                            while(b!=currentId){
-                                
-                                if (!alone && b!=currentId && b != id){
-                                    console.log(b+" class num "+document.getElementById(b).classList.length);
-                                    return false;
-                                }
-                                if (b == currentId){
-                                    break;
-                                }
-                                if (b > currentId){
-                                    b -= 1
-                                }else{
-                                    b += 1
-                                }
-                                amount_of_classes = document.getElementById(b).classList.length;
-                                alone = amount_of_classes == 1;
-                            }
-                            return true;
+                        //Form is used to edit the change in a readable
+                        if(idDiff > 0){
+                            form = 1;
                         }
-                        break;
+                        if(canDivide(idDiff,8)){
+                            change = 8*form;
+                        }
+                        console.log(change);
+                        while(b!= currentId){
+                            if (!alone && b!=currentId && b != id){
+                                console.log(b+' square "'+document.getElementById(b).classList + '" and the amount of classes: '+amount_of_classes);
+                                return false;
+                            }
+                            if (b == currentId){
+                                break;
+                            }
+                            b += change;
+                            console.log(b);
+                            amount_of_classes = document.getElementById(b).classList.length;
+                            alone = amount_of_classes == 1;
+                        }
+                        return true;
                     case "black-bishop":
                     case "white-bishop":    
                         if (is_SameColor && canMove){
-                            let form = 1;
-                            let change = 0;
                             if (idDiff < 0){
                                 form = -1;
                             }
@@ -493,81 +470,39 @@
                         break;
                     case "black-queen":
                     case "white-queen":
-                        let direction = null;
-                        //this is to catch first if there is any acceptable conditions
-                         if (!canDivide(idDiff,8) && !is_on_same_rank && !canMove){
+                        if(!canDivide(idDiff,8)&&!is_on_same_rank&&!canMove){
                             return false;
                         }
-                        if (canDivide(idDiff,8)){
-                            while(b!=currentId){
-                                console.log(idDiff);
-                                
-                                if (!alone && b!=currentId && b != id){
-                                    console.log(b+" class num"+document.getElementById(b).classList.length);
-                                    return false;
-                                }
-                                if (b == currentId){
-                                    break;
-                                }
-                                if (b > currentId){
-                                    b -= 8;
-                                }else{
-                                    b += 8;
-                                }
-                                amount_of_classes = document.getElementById(b).classList.length;
-                                alone = amount_of_classes == 1;
-                            }
-                            return true;
-                        }else if (is_SameColor && canMove){
-                            let form = 1;
-                            let change = 0;
-                            if (idDiff < 0){
-                                form = -1;
-                            }
-                            if (canDivide(idDiff,7)){
-                                change = 7*form
-                            }else{
-                                change = 9*form
-                            }
-                            console.log("The change is equal to "+change)
-                            while(b!= currentId){
-                                if (!alone && b!=currentId && b != id){
-                                    console.log(b+' square "'+document.getElementById(b).classList + '" and the amount of classes: '+amount_of_classes);
-                                    return false;
-                                }
-                                if (b == currentId){
-                                    break;
-                                }
-                                b += change;
-                                console.log(b);
-                                amount_of_classes = document.getElementById(b).classList.length;
-                                alone = amount_of_classes == 1;
-                            }
-                            return true;
-                        }else{
-                            //horozontal movement
-                            while(b!=currentId){
-                                
-                                if (!alone && b!=currentId && b != id){
-                                    console.log(b+" class num "+document.getElementById(b).classList.length);
-                                    console.log(b!=currentId);
-                                    console.log(b != id);
-                                    return false;
-                                }
-                                if (b == currentId){
-                                    break;
-                                }
-                                if (b > currentId){
-                                    b -= 1;
-                                }else{
-                                    b += 1;
-                                }
-                                amount_of_classes = document.getElementById(b).classList.length;
-                                alone = amount_of_classes == 1;
-                            }
-                            return true;
+                        if(idDiff > 0){
+                            form = 1;
                         }
-                        break;
+                        switch(idDiff){
+                            case canDivide(idDiff,8):
+                                change = 8*form;
+                                break;
+                            case canDivide(idDiff,9):
+                                change = 9*form;
+                                break;
+                            case canDivide(idDiff,7):
+                                change = 7*form
+                            default:
+                                change = 1*form
+                        }
+                        console.log(change);
+                        while(b!= currentId){
+                            if (!alone && b!=currentId && b != id){
+                                console.log(b+' square "'+document.getElementById(b).classList + '" and the amount of classes: '+amount_of_classes);
+                                return false;
+                            }
+                            if (b == currentId){
+                                break;
+                            }
+                            b += change;
+                            console.log(b);
+                            amount_of_classes = document.getElementById(b).classList.length;
+                            alone = amount_of_classes == 1;
+                        }
+                        return true;
                     }
                     return false;
                     current_space_color = currentPiece.classList[0];
@@ -633,7 +568,7 @@
         </script>
     </head>
     <body>
-        <button onClick = "reset()" id = 'reset'>Reset</button>
+        <button onClick = "reset(true)" id = 'reset'>Reset</button>
         <table border = "1vw">
             <!--Row 8-->
             <tr>
@@ -700,13 +635,13 @@
                <td onClick = "logClick(this)" id = "48" class = "green"></td>
             <!--Row 2-->
             <tr>
-               <td onClick = "logClick(this)" id = "49" class = "green white-pawn "></td>
-                <td onClick = "logClick(this)" id = "50" class = "tan white-pawn "></td>
-               <td onClick = "logClick(this)" id = "51" class = "green white-pawn "></td>
-                <td onClick = "logClick(this)" id = "52" class = "tan white-pawn "></td>
-               <td onClick = "logClick(this)" id = "53" class = "green white-pawn "></td>
-                <td onClick = "logClick(this)" id = "54" class = "tan white-pawn "></td>
-               <td onClick = "logClick(this)" id = "55" class = "green white-pawn "></td>
+               <td onClick = "logClick(this)" id = "49" class = "green white-pawn"></td>
+                <td onClick = "logClick(this)" id = "50" class = "tan white-pawn"></td>
+               <td onClick = "logClick(this)" id = "51" class = "green white-pawn"></td>
+                <td onClick = "logClick(this)" id = "52" class = "tan white-pawn"></td>
+               <td onClick = "logClick(this)" id = "53" class = "green white-pawn"></td>
+                <td onClick = "logClick(this)" id = "54" class = "tan white-pawn"></td>
+               <td onClick = "logClick(this)" id = "55" class = "green white-pawn"></td>
                 <td onClick = "logClick(this)" id = "56" class = "tan white-pawn"></td>
             </tr>
             <!--Row 1-->
